@@ -1,0 +1,36 @@
+.form-group.required .control-label:after {
+    content: "*";
+    color: red;
+}
+
+#questionnaires .selectedcolor {
+    background-color: #0f0f0f;
+    display: inline-block;
+    vertical-align: middle;
+    height: 20px;
+    width: 20px;
+}
+
+.colordialog-black {
+    background-color: #0f0f0f;
+}
+
+.colordialog-red {
+    background-color: #b92c28;
+}
+
+.colordialog-green {
+    background-color: #398439;
+}
+
+.colordialog-yellow {
+    background-color: #ffff00;
+}
+
+.colordialog-blue {
+    background-color: #337ab7;
+}
+
+.colordialog-white {
+    background-color: #f7f7f7;
+}
