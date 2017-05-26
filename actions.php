@@ -17,7 +17,7 @@ switch ($action) {
         $firstname = clean_param(optional_param('firstname', ''), PARAM_RAW);
         $middlename = clean_param(optional_param('middlename', ''), PARAM_RAW);
         $birth = clean_param(optional_param('birth', ''), PARAM_DATE);
-        $color = clean_param(optional_param('color', 'rgb(15, 15, 15)'), PARAM_RAW);
+        $color = clean_param(optional_param('color', ''), PARAM_RAW);
         $skills = clean_param(optional_param('skills', ''), PARAM_RAW);
         $personal = optional_param('personal', '');
         $avatar = get_file('avatar', true);
@@ -46,19 +46,6 @@ switch ($action) {
         if ($skills == false) {
             $errors['skills'] = 'required';
         }
-        $personals = [];
-        if (isset($personal['assiduity'])) {
-            $personals['assiduity'] = true;
-        }
-        if (isset($personal['neatness'])) {
-            $personals['neatness'] = true;
-        }
-        if (isset($personal['selflearning'])) {
-            $personals['selflearning'] = true;
-        }
-        if (isset($personal['diligence'])) {
-            $personals['diligence'] = true;
-        }
         if ($avatar) {
             if (!AcImage::isFileImage($avatar['tmp_name'])) {
                 $errors['avatar'] = 'noimage';
@@ -86,7 +73,10 @@ switch ($action) {
                 'birth' => $birth,
                 'color' => $color,
                 'skills' => $skills,
-                'personal' => json_encode($personals),
+                'assiduity' => (int)isset($personal['assiduity']),
+                'neatness' => (int)isset($personal['neatness']),
+                'selflearning' => (int)isset($personal['selflearning']),
+                'diligence' => (int)isset($personal['diligence'])
             ));
             if ($avatar) {
                 FileManager::add_file($id, 'avatar', $avatar);

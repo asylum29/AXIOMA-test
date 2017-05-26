@@ -3,6 +3,10 @@
     color: red;
 }
 
+body {
+    padding-top: 70px;
+}
+
 #questionnaires .selectedcolor {
     background-color: #0f0f0f;
     display: inline-block;

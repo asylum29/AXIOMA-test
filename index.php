@@ -15,7 +15,7 @@ require_once('config.php'); ?>
     <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/api.js"; ?>"></script>
     <title>Анкетирование</title>
 </head>
-<body style="padding-top: 70px;" data-wwwroot="<?php echo $CONFIG->wwwroot; ?>">
+<body data-wwwroot="<?php echo $CONFIG->wwwroot; ?>">
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
