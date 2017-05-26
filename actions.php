@@ -2,8 +2,6 @@
 
 require_once('config.php');
 
-$action = optional_param('action');
-
 $errors = [];
 if (!post_data_submitted()) {
     $errors['nopost'] = true;
@@ -11,6 +9,7 @@ if (!post_data_submitted()) {
     exit();
 }
 
+$action = optional_param('action');
 switch ($action) {
     case 'add':
         $sex = clean_param(optional_param('sex', ''), PARAM_RAW);
@@ -22,19 +21,30 @@ switch ($action) {
         $skills = clean_param(optional_param('skills', ''), PARAM_RAW);
         $personal = optional_param('personal', '');
         $avatar = get_file('avatar', true);
-        $photos = get_file('photos', true);
+        $photos = array(
+            get_file('photo1', true),
+            get_file('photo2', true),
+            get_file('photo3', true),
+            get_file('photo4', true),
+            get_file('photo5', true),
+        );
 
         if ($sex !== 'm' && $sex !== 'f') {
-            $errors['sex'] = true;
+            $errors['sex'] = 'required';
         }
         if ($lastname == false) {
-            $errors['lastname'] = true;
+            $errors['lastname'] = 'required';
         }
         if ($birth == false) {
-            $errors['birth'] = true;
+            $errors['birth'] = 'required';
+        }
+        $interval = '([0-9]|[1-9][0-9]|1[0-9][0-9]|2[0-4][0-9]|25[0-5])';
+        $pattern = "/rgb\($interval, $interval, $interval\)/";
+        if (!preg_match($pattern, $color)) {
+            $errors['color'] = 'nocolor';
         }
         if ($skills == false) {
-            $errors['skills'] = true;
+            $errors['skills'] = 'required';
         }
         $personals = [];
         if (isset($personal['assiduity'])) {
@@ -49,15 +59,21 @@ switch ($action) {
         if (isset($personal['diligence'])) {
             $personals['diligence'] = true;
         }
-        if ($avatar && (!AcImage::isFileImage($avatar['tmp_name']) || filesize($avatar['tmp_name']) / 1024 > 1000)) {
-            $errors['avatar'] = true;
+        if ($avatar) {
+            if (!AcImage::isFileImage($avatar['tmp_name'])) {
+                $errors['avatar'] = 'noimage';
+            } else if ($avatar['size'] / 1024 > 100) {
+                $errors['avatar'] = 'filesize';
+            }
         }
-        if ($photos && is_array($photos)) {
-            foreach ($photos as $photo) {
-                if (!AcImage::isFileImage($photo['tmp_name']) || filesize($photo['tmp_name']) / (1024 * 1024) > 5) {
-                    $errors['photos'] = true;
-                    break;
-                }
+        foreach ($photos as $photo) {
+            if (!$photo) continue;
+            if (!AcImage::isFileImage($photo['tmp_name'])) {
+                $errors['photos'] = 'noimage';
+                break;
+            } else if ($photo['size'] / 1024 / 1024 > 5) {
+                $errors['photos'] = 'filesize';
+                break;
             }
         }
 
@@ -75,12 +91,9 @@ switch ($action) {
             if ($avatar) {
                 FileManager::add_file($id, 'avatar', $avatar);
             }
-            if ($photos && is_array($photos)) {
-                $count = 1;
-                foreach ($photos as $photo) {
-                    FileManager::add_file($id, 'photos', $photo);
-                    if (++$count > 5) break;
-                }
+            foreach ($photos as $photo) {
+                if (!$photo) continue;
+                FileManager::add_file($id, 'photos', $photo);
             }
             echo 'true';
         } else {

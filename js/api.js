@@ -2,11 +2,15 @@ $(document).ready(function() {
     $.ajaxSetup ({ cache: false });
     var wwwroot = $('body').data('wwwroot');
     var ui = new UI(wwwroot);
+    $('#main-public').on('click', function(e) {
+        e.preventDefault();
+        ui.showQuestionnaires();
+    });
 });
 
 var UI = function(wwwroot) {
     var content = $('#content');
-    var questionnaires = $('<div></div>').load(wwwroot + '/html/questionnaires.html', function() {
+    const questionnaires = $('<div></div>').load(wwwroot + '/html/questionnaires.html', function() {
         showQuestionnaires();
     });
 
@@ -14,7 +18,7 @@ var UI = function(wwwroot) {
 
     function showQuestionnaires() {
         content.empty();
-        content.append(questionnaires);
+        content.append(questionnaires.clone());
         content.find('.date-ui').datepicker({ dateFormat: 'yy-mm-dd' }, $.datepicker.regional['ru']);
         var stage = 1;
         var prevbtn = content.find('.qnprev');
@@ -26,6 +30,7 @@ var UI = function(wwwroot) {
             if (--stage === 1) {
                 prevbtn.prop('disabled', true);
             }
+            content.find('#success').remove();
             showQuestionnairesStage(stage);
         });
         nextbtn.on('click', function() {
@@ -34,6 +39,7 @@ var UI = function(wwwroot) {
             if (++stage === 4) {
                 nextbtn.prop('disabled', true);
             }
+            content.find('#success').remove();
             showQuestionnairesStage(stage);
         });
         showQuestionnairesStage(1);
@@ -49,18 +55,21 @@ var UI = function(wwwroot) {
                 }
             }
         }
-        savebtn.on('click', function(e) { // Проблема с отправкой файлов!
+        savebtn.on('click', function(e) {
             e.preventDefault();
-            $('#errors').remove();
             var form = $(e.target).closest('form');
+            var formdata = new FormData(form[0]);
+            content.find('#errors').remove();
             $.ajax({
-                url: wwwroot + '/actions.php?action=add',
-                timeout: 60000,
-                data: form.serialize(),
                 type: 'post',
+                url: wwwroot + '/actions.php?action=add',
+                data: formdata,
+                contentType: false,
+                processData: false,
                 dataType: 'json',
                 success: function (data) {
                     if (data != true) {
+                        var message = '';
                         var errors = 'При отправке анкеты были обнаружены ошибки:<ul>';
                         if (data.sex) {
                             errors += '<li>' + 'вы не указали пол' + '</li>';
@@ -71,25 +80,29 @@ var UI = function(wwwroot) {
                         if (data.birth) {
                             errors += '<li>' + 'вы не указали дату рождения' + '</li>';
                         }
+                        if (data.color) {
+                            errors += '<li>' + 'ваш любимый цвет был указан некорректно' + '</li>';
+                        }
                         if (data.skills) {
                             errors += '<li>' + 'вы не указали навыки' + '</li>';
                         }
                         if (data.avatar) {
-                            errors += '<li>' + 'вы не указали аватар' + '</li>';
+                            message = data.avatar == 'noimage' ? 'аватар не является изображением' : 'максимальный размер аватара равен 100кб';
+                            errors += '<li>' + message + '</li>';
                         }
                         if (data.photos) {
-                            errors += '<li>' + 'вы не указали фотографии' + '</li>';
+                            message = data.photos == 'noimage' ? 'одна из фотографий не является изображением' : 'максимальный размер фотографии равен 5мб';
+                            errors += '<li>' + message + '</li>';
                         }
                         errors += '</ul>';
                         form.prepend('<div id=\'errors\' class=\'alert alert-danger\'>' + errors + '</div>');
+                    } else {
+                        showQuestionnaires();
+                        content.find('form').prepend('<div id=\'success\' class=\'alert alert-success\'>Ваша анкета была успешно отправлена</div>');
                     }
                 },
-                error: function () {
-
-                },
-                complete: function () {
-
-                }
+                error: function () { },
+                complete: function () { }
             });
         });
         content.find('.colordialog').on('click', function() {
@@ -98,10 +111,10 @@ var UI = function(wwwroot) {
             content.find('input[name=color]').val(color);
             content.find('#colordialog').modal('toggle');
         });
-        var photos = 1;
+        var photo = 1;
         content.find('.addphotobtn').on('click', function() {
-            content.find('.photos').append('<input type=\'file\' name=\'photos[]\'>');
-            if (++photos === 5) {
+            content.find('.photos').append('<input type=\'file\' name=\'photo'+ ++photo + '\'>');
+            if (photo === 5) {
                 content.find('.addphotobtn').hide();
             }
         });

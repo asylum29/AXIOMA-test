@@ -19,15 +19,15 @@ require_once('config.php'); ?>
 <nav class="navbar navbar-inverse navbar-fixed-top">
     <div class="container">
         <div class="navbar-header">
-            <a class="navbar-brand" href="#">Задание AXIOMA</a>
+            <a class="navbar-brand" href="#">AXIOMA-test</a>
         </div>
         <div class="navbar-collapse collapse">
             <ul class="nav navbar-nav">
                 <li>
-                    <a href="#">Публичная часть</a>
+                    <a id="main-public" href="#">Публичная часть</a>
                 </li>
                 <li>
-                    <a href="#">Административная часть</a>
+                    <a id="main-admin" href="#">Административная часть</a>
                 </li>
             </ul>
         </div>
