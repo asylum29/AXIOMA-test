@@ -3,15 +3,11 @@
 require_once('config.php');
 
 $errors = [];
-if (!post_data_submitted()) {
-    $errors['nopost'] = true;
-    echo json_encode($errors);
-    exit();
-}
-
 $action = optional_param('action');
 switch ($action) {
     case 'add':
+        post_required();
+        
         $sex = clean_param(optional_param('sex', ''), PARAM_RAW);
         $lastname = clean_param(optional_param('lastname', ''), PARAM_RAW);
         $firstname = clean_param(optional_param('firstname', ''), PARAM_RAW);
@@ -90,4 +86,99 @@ switch ($action) {
             echo json_encode($errors);
         }
         break;
+    
+    case 'isadmin':
+        echo $USER->is_admin() ? 'true' : 'false';
+        break;
+
+    case 'auth':
+        post_required();
+
+        $password = clean_param(optional_param('password', ''), PARAM_RAW);
+        if ($USER->is_admin() || $USER->authorise($password)) {
+            echo 'true';
+        } else {
+            $errors['invalidpassword'] = true;
+            echo json_encode($errors);
+        }
+        break;
+
+    case 'getlist':
+        admin_required();
+
+        $params = array();
+        $personal = optional_param('personal', '');
+        if (isset($personal['assiduity'])) {
+            $params['assiduity'] = 1;
+        }
+        if (isset($personal['neatness'])) {
+            $params['neatness'] = 1;
+        }
+        if (isset($personal['selflearning'])) {
+            $params['selflearning'] = 1;
+        }
+        if (isset($personal['diligence'])) {
+            $params['diligence'] = 1;
+        }
+
+        $order = optional_param('sort', '');
+        switch ($order) {
+            case '2':
+                $order = 'ORDER BY birth';
+                break;
+            default:
+                $order = 'ORDER BY lastname';
+                break;
+        }
+
+        $questionnaires = $DB->get_records('questionnaires', $params, $order);
+        echo json_encode($questionnaires);
+        break;
+
+    case 'getelement':
+        admin_required();
+
+        $id = optional_param('id');
+        $record = $DB->get_record('questionnaires', array('id' => $id));
+        $avatar = FileManager::get_file_by_filearea($id, 'avatar');
+        $photos = FileManager::get_files_in_filearea($id, 'photos');
+
+        if ($record['assiduity'] == 0) {
+            unset($record['assiduity']);
+        }
+        if ($record['neatness'] == 0) {
+            unset($record['neatness']);
+        }
+        if ($record['selflearning'] == 0) {
+            unset($record['selflearning']);
+        }
+        if ($record['diligence'] == 0) {
+            unset($record['diligence']);
+        }
+        
+        $element['questionnaire'] = $record;
+        if ($avatar) {
+            $element['avatar'] = $avatar;
+        }
+        if (count($photos) > 0) {
+            $element['photos'] = $photos;
+        }
+        
+        echo json_encode($element);
+        break;
+}
+
+function post_required() {
+    if (!post_data_submitted()) {
+        echo json_encode(array('nopost' => true));
+        exit();
+    }
+}
+
+function admin_required() {
+    global $USER;
+    if (!$USER->is_admin()) {
+        echo json_encode(array('noauth' => true));
+        exit();
+    }
 }

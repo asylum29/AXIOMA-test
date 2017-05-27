@@ -38,3 +38,15 @@ body {
 .colordialog-white {
     background-color: #f7f7f7;
 }
+
+.splitter span:after {
+    content: ', ';
+}
+
+.splitter span:last-child:after {
+    content: '';
+}
+
+#element .table tr td:first-child {
+    font-weight: bold;
+}

@@ -23,10 +23,13 @@ class DBConnection {
         return !empty($records) ? $records[0] : false;
     }
 
-    public function get_records($table, array $params = array()) {
+    public function get_records($table, array $params = array(), $orderby = false) {
         $keys = array_keys($params);
         $args = array_map(function($e) { return "$e = :$e"; }, $keys);
         $sql = "SELECT * FROM $table " . (count($args) > 0 ? 'WHERE ' . implode(' AND ', $args) : '');
+        if ($orderby) {
+            $sql .= (' ' . $orderby);
+        }
         $sth = $this->pdo->prepare($sql);
         $sth->execute($params);
         return $sth->fetchAll(PDO::FETCH_ASSOC);

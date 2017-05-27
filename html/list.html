@@ -1,0 +1,148 @@
+﻿<div id="list">
+    <div id="elements">
+        <h2>Список анкет</h2>
+
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Фильтр по личным качествам
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" method="get">
+
+                    <div class="form-group">
+                        <label class="control-label col-sm-2">Личные качества</label>
+                        <div class="col-sm-10">
+                            <label class="checkbox-inline"><input type="checkbox"
+                                                                  name="personal[assiduity]">усидчивость</label>
+                            <label class="checkbox-inline"><input type="checkbox"
+                                                                  name="personal[neatness]">опрятность</label>
+                            <label class="checkbox-inline"><input type="checkbox" name="personal[selflearning]">самообучаемость</label>
+                            <label class="checkbox-inline"><input type="checkbox"
+                                                                  name="personal[diligence]">трудолюбие</label>
+                        </div>
+                    </div>
+
+                    <input type="hidden" name="sort" value="1">
+
+                    <div class="text-center">
+                        <input class="filterbtn btn btn-sm btn-primary" type="submit" value="Выполнить фильтрацию">
+                    </div>
+
+                </form>
+            </div>
+        </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th><a href="#" class="sortlink" data-sort="1">Фамилия<span>^</span></a></th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th><a href="#" class="sortlink" data-sort="2">Дата рождения<span></span></a></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="contentlist">
+            <script id="listtmpl" type="text/html">
+                {{#list}}
+                <tr>
+                    <td>{{lastname}}</td>
+                    <td>{{firstname}}</td>
+                    <td>{{middlename}}</td>
+                    <td>
+                        {{#formatdate}}
+                        {{birth}}
+                        {{/formatdate}}
+                    </td>
+                    <td>
+                        <a href="#" class="more" data-id="{{id}}">
+                            Подробнее
+                        </a>
+                    </td>
+                </tr>
+                {{/list}}
+            </script>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="element" style="display: none;">
+        <h2>Анкета</h2>
+
+        <table class="table">
+            <tbody id="contentelement">
+            <script id="elementtmpl" type="text/html">
+                {{#element}}
+                <tr>
+                    <td style="width: 200px">Пол</td>
+                    <td>
+                        {{#formatsex}}
+                        {{#questionnaire}}{{sex}}{{/questionnaire}}
+                        {{/formatsex}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Фамилия</td>
+                    <td>{{#questionnaire}}{{lastname}}{{/questionnaire}}</td>
+                </tr>
+                <tr>
+                    <td>Имя</td>
+                    <td>{{#questionnaire}}{{firstname}}{{/questionnaire}}</td>
+                </tr>
+                <tr>
+                    <td>Отчество</td>
+                    <td>{{#questionnaire}}{{middlename}}{{/questionnaire}}</td>
+                </tr>
+                <tr>
+                    <td>Дата рождения</td>
+                    <td>
+                        {{#formatdate}}
+                        {{#questionnaire}}{{birth}}{{/questionnaire}}
+                        {{/formatdate}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Аватар</td>
+                    <td>
+                        {{#avatar}}
+                        {{#formatimage}}{{id}}{{/formatimage}}
+                        {{/avatar}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Любимый цвет</td>
+                    <td style="background-color: {{#questionnaire}}{{color}}{{/questionnaire}}"></td>
+                </tr>
+                <tr>
+                    <td>Навыки</td>
+                    <td>{{#questionnaire}}{{skills}}{{/questionnaire}}</td>
+                </tr>
+                <tr>
+                    <td>Личные качества</td>
+                    <td>
+                        <div class="splitter">
+                            {{#questionnaire}}
+                            {{#assiduity}}<span>усидчивость</span>{{/assiduity}}
+                            {{#neatness}}<span>опрятность</span>{{/neatness}}
+                            {{#selflearning}}<span>самообучаемость</span>{{/selflearning}}
+                            {{#diligence}}<span>трудолюбие</span>{{/diligence}}
+                            {{/questionnaire}}
+                        </div>
+                    </td>
+                </tr>
+                <tr>
+                    <td>Фотографии</td>
+                    <td>
+                        {{#photos}}
+                        {{#formatimage}}{{id}}{{/formatimage}}
+                        {{/photos}}
+                    </td>
+                </tr>
+                {{/element}}
+            </script>
+            </tbody>
+        </table>
+
+        <button class="retbtn btn btn-sm btn-default">Назад</button>
+    </div>
+</div>

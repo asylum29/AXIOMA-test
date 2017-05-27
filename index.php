@@ -13,6 +13,7 @@ require_once('config.php'); ?>
     <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/jquery-ui.min.js"; ?>"></script>
     <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/bootstrap.min.js"; ?>"></script>
     <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/api.js"; ?>"></script>
+    <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/mustache.js"; ?>"></script>
     <title>Анкетирование</title>
 </head>
 <body data-wwwroot="<?php echo $CONFIG->wwwroot; ?>">
@@ -34,9 +35,7 @@ require_once('config.php'); ?>
     </div>
 </nav>
 <div class="container">
-    <div id="content">
-        
-    </div>
+    <div id="content"></div>
 </div>
 </body>
 </html>

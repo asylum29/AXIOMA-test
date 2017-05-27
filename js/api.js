@@ -1,20 +1,31 @@
 $(document).ready(function() {
-    $.ajaxSetup ({ cache: false });
+    //$.ajaxSetup ({ cache: false });
     var wwwroot = $('body').data('wwwroot');
     var ui = new UI(wwwroot);
     $('#main-public').on('click', function(e) {
         e.preventDefault();
         ui.showQuestionnaires();
     });
+    $('#main-admin').on('click', function(e) {
+        e.preventDefault();
+        ui.showListTable();
+    });
 });
 
 var UI = function(wwwroot) {
     var content = $('#content');
-    const questionnaires = $('<div></div>').load(wwwroot + '/html/questionnaires.html', function() {
-        showQuestionnaires();
-    });
+    var list, questionnaires;
+    var authform = $('<div></div>').load(wwwroot + '/html/auth.html', loadList);
+    function loadList() {
+        list = $('<div></div>').load(wwwroot + '/html/list.html', loadQuestionnaires);
+    }
+    function loadQuestionnaires() {
+        questionnaires = $('<div></div>').load(wwwroot + '/html/questionnaires.html', showQuestionnaires);
+    }
 
     this.showQuestionnaires = showQuestionnaires;
+    this.showAuthForm = showAuthForm;
+    this.showListTable = showListTable;
 
     function showQuestionnaires() {
         content.empty();
@@ -118,5 +129,147 @@ var UI = function(wwwroot) {
                 content.find('.addphotobtn').hide();
             }
         });
+    }
+
+    function isAdmin(isfalse, istrue) {
+        $.ajax({
+            type: 'get',
+            url: wwwroot + '/actions.php?action=isadmin',
+            dataType: 'json',
+            success: function (data) {
+                if (data != true) {
+                    isfalse();
+                } else {
+                    istrue();
+                }
+            }
+        });
+    }
+
+    function showAuthForm() {
+        content.empty();
+        isAdmin(function() {
+            content.append(authform.clone());
+            content.find('input[type=submit]').on('click', function(e) {
+                e.preventDefault();
+                var form = $(e.target).closest('form');
+                var formdata = new FormData(form[0]);
+                content.find('#errors').remove();
+                $.ajax({
+                    type: 'post',
+                    url: wwwroot + '/actions.php?action=auth',
+                    data: formdata,
+                    contentType: false,
+                    processData: false,
+                    dataType: 'json',
+                    success: function (data) {
+                        if (data != true) {
+                            form.prepend('<div id=\'errors\' class=\'alert alert-danger\'>Неверный пароль</div>');
+                        } else {
+                            showListTable();
+                        }
+                    }
+                });
+            });
+        },
+            showListTable
+        );
+    }
+
+    function showListTable() {
+        content.empty();
+        isAdmin(showAuthForm, function() {
+            content.append(list.clone());
+            content.find('.filterbtn').on('click', function(e) {
+                e.preventDefault();
+                getData($(e.target).closest('form').serialize());
+            });
+            content.find('.sortlink').on('click', function(e) {
+                e.preventDefault();
+                content.find('.sortlink span').text('');
+                var target = $(e.target);
+                target.find('span').text('^');
+                var form = content.find('form');
+                form.find('input[name=sort]').val(target.data('sort'));
+                getData(form.serialize());
+            });
+            content.find('.retbtn').on('click', function(e) {
+                e.preventDefault();
+                content.find('#element').hide();
+                content.find('#elements').show();
+            });
+            getData();
+        });
+        function getData(formdata) {
+            $.ajax({
+                type: 'get',
+                url: wwwroot + '/actions.php?action=getlist',
+                data: formdata,
+                dataType: 'json',
+                success: elementsReceived
+            });
+        }
+        function elementsReceived(data) {
+            if (!data.noauth) {
+                content.find('#contentlist tr').remove();
+                var template = content.find('#listtmpl').html();
+                var rendered = Mustache.render(template, {
+                    'list': data,
+                    'formatdate': formatDate
+                });
+                content.find('#contentlist').append(rendered);
+                content.find('.more').on('click', function(e) {
+                    var target = $(e.target);
+                    $.ajax({
+                        type: 'get',
+                        url: wwwroot + '/actions.php?action=getelement&id=' + target.data('id'),
+                        dataType: 'json',
+                        success: elementReceived
+                    });
+                });
+            } else {
+                showAuthForm();
+            }
+        }
+        function elementReceived(data) {
+            if (!data.noauth) {
+                content.find('#elements').hide();
+                content.find('#element').show();
+                content.find('#contentelement tr').remove();
+                var template = content.find('#elementtmpl').html();
+                var rendered = Mustache.render(template, {
+                    'element': data,
+                    'formatdate': formatDate,
+                    'formatsex': formatSex,
+                    'formatimage': formatImage
+                });
+                content.find('#contentelement').append(rendered);
+            } else {
+                showAuthForm();
+            }
+        }
+        function formatDate() {
+            return function(date, render) {
+                var d = new Date(render(date) * 1000);
+                var options = {
+                    year: 'numeric',
+                    month: 'numeric',
+                    day: 'numeric'
+                };
+                return d.toLocaleString('ru', options);
+            }
+        }
+        function formatSex() {
+            return function(value, render) {
+                var v = render(value).trim();
+                return v == 'm' ? 'мужской' : 'женский';
+            }
+        }
+        function formatImage() {
+            return function(value, render) {
+                var v = render(value).trim();
+                return '<img height="60" width="60" src="' + wwwroot + '/file.php?id=' + v + '" />';
+            }
+        }
     }
 };

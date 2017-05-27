@@ -2,13 +2,6 @@
 
 defined('APP_INTERNAL') || die;
 
-function require_login() {
-    global $USER, $CONFIG;
-    if (!$USER->is_admin()) {
-        redirect("{$CONFIG->wwwroot}/auth.php");
-    }
-}
-
 function required_param($name) {
     if (isset($_POST[$name])) {
         return $_POST[$name];
