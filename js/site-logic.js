@@ -1,5 +1,5 @@
 $(document).ready(function() {
-    //$.ajaxSetup ({ cache: false });
+    $.ajaxSetup ({ cache: false });
     var wwwroot = $('body').data('wwwroot');
     var ui = new UI(wwwroot);
     $('#main-public').on('click', function(e) {
@@ -98,11 +98,11 @@ var UI = function(wwwroot) {
                             errors += '<li>' + 'вы не указали навыки' + '</li>';
                         }
                         if (data.avatar) {
-                            message = data.avatar == 'noimage' ? 'аватар не является изображением' : 'максимальный размер аватара равен 100кб';
+                            message = data.avatar == 'noimage' ? 'аватар должен быть в формате *.png, *.jpg/jpeg, *.gif' : 'максимальный размер аватара равен 100кб';
                             errors += '<li>' + message + '</li>';
                         }
                         if (data.photos) {
-                            message = data.photos == 'noimage' ? 'одна из фотографий не является изображением' : 'максимальный размер фотографии равен 1мб';
+                            message = data.photos == 'noimage' ? 'все фотографии должны быть в формате *.png, *.jpg/jpeg, *.gif' : 'максимальный размер фотографии равен 1мб';
                             errors += '<li>' + message + '</li>';
                         }
                         errors += '</ul>';

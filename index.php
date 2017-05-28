@@ -10,7 +10,7 @@
     <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/bootstrap-datepicker.min.js"; ?>"></script>
     <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/bootstrap-datepicker.ru.min.js"; ?>"></script>
     <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/bootstrap.min.js"; ?>"></script>
-    <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/api.js"; ?>"></script>
+    <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/site-logic.js"; ?>"></script>
     <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/mustache.js"; ?>"></script>
     <title>Анкетирование</title>
 </head>

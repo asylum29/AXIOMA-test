@@ -1,11 +1,19 @@
+body {
+    padding-top: 70px;
+    padding-bottom: 10px;
+}
+
 .form-group.required .control-label:after {
     content: "*";
     color: red;
 }
 
-body {
-    padding-top: 70px;
-    padding-bottom: 10px;
+.splitter span:after {
+    content: ', ';
+}
+
+.splitter span:last-child:after {
+    content: '';
 }
 
 #questionnaires .selectedcolor {
@@ -16,36 +24,44 @@ body {
     width: 20px;
 }
 
-.colordialog-black {
+#questionnaires .colordialog-black {
     background-color: #0f0f0f;
 }
 
-.colordialog-red {
+#questionnaires .colordialog-red {
     background-color: #b92c28;
 }
 
-.colordialog-green {
+#questionnaires .colordialog-green {
     background-color: #398439;
 }
 
-.colordialog-yellow {
+#questionnaires .colordialog-yellow {
     background-color: #ffff00;
 }
 
-.colordialog-blue {
+#questionnaires .colordialog-blue {
     background-color: #337ab7;
 }
 
-.colordialog-white {
+#questionnaires .colordialog-white {
     background-color: #f7f7f7;
 }
 
-.splitter span:after {
-    content: ', ';
+#questionnaires .colordialog-addcolor1 {
+    background-color: #a416c6;
 }
 
-.splitter span:last-child:after {
-    content: '';
+#questionnaires .colordialog-addcolor2 {
+    background-color: #ff8412;
+}
+
+#questionnaires .colordialog-addcolor3 {
+    background-color: #00f6ff;
+}
+
+#questionnaires .panel {
+    min-height: 350px;
 }
 
 #element .table tr td:first-child {

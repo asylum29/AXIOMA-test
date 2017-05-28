@@ -8,13 +8,13 @@ switch ($action) {
     case 'add':
         post_required();
         
-        $sex = clean_param(optional_param('sex', ''), PARAM_RAW);
-        $lastname = clean_param(optional_param('lastname', ''), PARAM_RAW);
-        $firstname = clean_param(optional_param('firstname', ''), PARAM_RAW);
-        $middlename = clean_param(optional_param('middlename', ''), PARAM_RAW);
-        $birth = clean_param(optional_param('birth', ''), PARAM_DATE);
-        $color = clean_param(optional_param('color', ''), PARAM_RAW);
-        $skills = clean_param(optional_param('skills', ''), PARAM_RAW);
+        $sex = clean_param(optional_param('sex', ''), PARAM_NOTAGS);
+        $lastname = clean_param(optional_param('lastname', ''), PARAM_NOTAGS);
+        $firstname = clean_param(optional_param('firstname', ''), PARAM_NOTAGS);
+        $middlename = clean_param(optional_param('middlename', ''), PARAM_NOTAGS);
+        $birth = clean_param(optional_param('birth', ''), PARAM_NOTAGS);
+        $color = clean_param(optional_param('color', ''), PARAM_NOTAGS);
+        $skills = clean_param(optional_param('skills', ''), PARAM_NOTAGS);
         $personal = optional_param('personal', '');
         $avatar = get_file('avatar', true);
         $photos = array(
@@ -43,7 +43,7 @@ switch ($action) {
             $errors['skills'] = 'required';
         }
         if ($avatar) {
-            if (!AcImage::isFileImage($avatar['tmp_name'])) {
+            if (!check_format($avatar['name']) || !AcImage::isFileImage($avatar['tmp_name'])) {
                 $errors['avatar'] = 'noimage';
             } else if ($avatar['size'] / 1024 > 100) {
                 $errors['avatar'] = 'filesize';
@@ -51,7 +51,7 @@ switch ($action) {
         }
         foreach ($photos as $photo) {
             if (!$photo) continue;
-            if (!AcImage::isFileImage($photo['tmp_name'])) {
+            if (!check_format($photo['name']) || !AcImage::isFileImage($photo['tmp_name'])) {
                 $errors['photos'] = 'noimage';
                 break;
             } else if ($photo['size'] / 1024 / 1024 > 1) {
@@ -216,4 +216,10 @@ function admin_required() {
         echo json_encode(array('noauth' => true));
         exit();
     }
+}
+
+function check_format($filename) {
+    $format = pathinfo($filename, PATHINFO_EXTENSION);
+    $formats = array('jpg', 'jpeg', 'png', 'gif');
+    return in_array($format, $formats);
 }
