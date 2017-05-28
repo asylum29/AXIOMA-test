@@ -24,12 +24,12 @@ CREATE TABLE `files` (
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;*/
 
 $CONFIG = new stdClass();
-$CONFIG->dirroot = '';
-$CONFIG->wwwroot = '';
-$CONFIG->dbname = '';
-$CONFIG->dbuser = '';
-$CONFIG->dbpassword = '';
-$CONFIG->dataroot = '';
-$CONFIG->password = '';
+$CONFIG->dirroot = 'C:/path/to/wwwroot';
+$CONFIG->wwwroot = 'http://localhost:90';
+$CONFIG->dbname = 'dbname';
+$CONFIG->dbuser = 'dbuser';
+$CONFIG->dbpassword = 'dbpass';
+$CONFIG->dataroot = 'C:/path/to/files';
+$CONFIG->password = 'password';
 
 require_once('loader.php');
