@@ -1,16 +1,14 @@
-<?php
-
-require_once('config.php'); ?>
-
+<?php require_once('config.php'); ?>
 <!DOCTYPE html>
 <html>
 <head>
     <meta charset="UTF-8">
     <link rel="stylesheet" href="<?php echo $CONFIG->wwwroot . "/css/styles.css"; ?>">
     <link rel="stylesheet" href="<?php echo $CONFIG->wwwroot . "/css/bootstrap.min.css"; ?>">
-    <link rel="stylesheet" href="<?php echo $CONFIG->wwwroot . "/css/jquery-ui.min.css"; ?>">
+    <link rel="stylesheet" href="<?php echo $CONFIG->wwwroot . "/css/bootstrap-datepicker.min.css"; ?>">
     <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/jquery-3.1.1.min.js"; ?>"></script>
-    <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/jquery-ui.min.js"; ?>"></script>
+    <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/bootstrap-datepicker.min.js"; ?>"></script>
+    <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/bootstrap-datepicker.ru.min.js"; ?>"></script>
     <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/bootstrap.min.js"; ?>"></script>
     <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/api.js"; ?>"></script>
     <script type="text/javascript" src="<?php echo $CONFIG->wwwroot . "/js/mustache.js"; ?>"></script>

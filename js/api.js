@@ -14,13 +14,13 @@ $(document).ready(function() {
 
 var UI = function(wwwroot) {
     var content = $('#content');
-    var list, questionnaires;
-    var authform = $('<div></div>').load(wwwroot + '/html/auth.html', loadList);
+    var questionnaires, questionform;
+    var authform = $('<div></div>').load(wwwroot + '/html/authform.html', loadList);
     function loadList() {
-        list = $('<div></div>').load(wwwroot + '/html/list.html', loadQuestionnaires);
+        questionnaires = $('<div></div>').load(wwwroot + '/html/questionnaires.html', loadQuestionnaires);
     }
     function loadQuestionnaires() {
-        questionnaires = $('<div></div>').load(wwwroot + '/html/questionnaires.html', showQuestionnaires);
+        questionform = $('<div></div>').load(wwwroot + '/html/questionsform.html', showQuestionnaires);
     }
 
     this.showQuestionnaires = showQuestionnaires;
@@ -29,8 +29,8 @@ var UI = function(wwwroot) {
 
     function showQuestionnaires() {
         content.empty();
-        content.append(questionnaires.clone());
-        content.find('.date-ui').datepicker({ dateFormat: 'yy-mm-dd' }, $.datepicker.regional['ru']);
+        content.append(questionform.clone());
+        content.find('.date-ui').datepicker({ format: 'yyyy-mm-dd', language: 'ru' });
         var stage = 1;
         var prevbtn = content.find('.qnprev');
         var nextbtn = content.find('.qnnext');
@@ -102,7 +102,7 @@ var UI = function(wwwroot) {
                             errors += '<li>' + message + '</li>';
                         }
                         if (data.photos) {
-                            message = data.photos == 'noimage' ? 'одна из фотографий не является изображением' : 'максимальный размер фотографии равен 5мб';
+                            message = data.photos == 'noimage' ? 'одна из фотографий не является изображением' : 'максимальный размер фотографии равен 1мб';
                             errors += '<li>' + message + '</li>';
                         }
                         errors += '</ul>';
@@ -179,9 +179,9 @@ var UI = function(wwwroot) {
     function showListTable() {
         content.empty();
         isAdmin(showAuthForm, function() {
-            content.append(list.clone());
+            content.append(questionnaires.clone());
             content.find('.filterbtn').on('click', function(e) {
-                e.preventDefault();
+                //e.preventDefault();
                 getData($(e.target).closest('form').serialize());
             });
             content.find('.sortlink').on('click', function(e) {
@@ -215,7 +215,8 @@ var UI = function(wwwroot) {
                 var template = content.find('#listtmpl').html();
                 var rendered = Mustache.render(template, {
                     'list': data,
-                    'formatdate': formatDate
+                    'formatdate': formatDate,
+                    'formatempty': formatEmpty
                 });
                 content.find('#contentlist').append(rendered);
                 content.find('.more').on('click', function(e) {
@@ -233,24 +234,27 @@ var UI = function(wwwroot) {
         }
         function elementReceived(data) {
             if (!data.noauth) {
-                content.find('#elements').hide();
-                content.find('#element').show();
-                content.find('#contentelement tr').remove();
-                var template = content.find('#elementtmpl').html();
-                var rendered = Mustache.render(template, {
-                    'element': data,
-                    'formatdate': formatDate,
-                    'formatsex': formatSex,
-                    'formatimage': formatImage
-                });
-                content.find('#contentelement').append(rendered);
+                if (data != false) {
+                    content.find('#elements').hide();
+                    content.find('#element').show();
+                    content.find('#contentelement tr').remove();
+                    var template = content.find('#elementtmpl').html();
+                    var rendered = Mustache.render(template, {
+                        'element': data,
+                        'formatdate': formatDate,
+                        'formatsex': formatSex,
+                        'formatimage': formatImage,
+                        'formatempty': formatEmpty
+                    });
+                    content.find('#contentelement').append(rendered);
+                }
             } else {
                 showAuthForm();
             }
         }
         function formatDate() {
             return function(date, render) {
-                var d = new Date(render(date) * 1000);
+                var d = new Date(render(date));
                 var options = {
                     year: 'numeric',
                     month: 'numeric',
@@ -268,7 +272,13 @@ var UI = function(wwwroot) {
         function formatImage() {
             return function(value, render) {
                 var v = render(value).trim();
-                return '<img height="60" width="60" src="' + wwwroot + '/file.php?id=' + v + '" />';
+                return '<img src="' + wwwroot + '/actions.php?action=getfile&id=' + v + '" />';
+            }
+        }
+        function formatEmpty() {
+            return function(value, render) {
+                var v = render(value).trim();
+                return v == '' ? '—' : v;
             }
         }
     }

@@ -6,7 +6,7 @@
   `lastname` longtext NOT NULL,
   `firstname` longtext,
   `middlename` longtext,
-  `birth` bigint(11) DEFAULT NULL,
+  `birth` date NOT NULL,
   `color` varchar(100) DEFAULT NULL,
   `assiduity` int(1) DEFAULT NULL,
   `neatness` int(1) DEFAULT NULL,
@@ -14,7 +14,7 @@
   `diligence` int(1) DEFAULT NULL,
   `skills` longtext NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=43 DEFAULT CHARSET=utf8;
+) ENGINE=InnoDB AUTO_INCREMENT=64 DEFAULT CHARSET=utf8;
 CREATE TABLE `files` (
 `id` int(11) NOT NULL AUTO_INCREMENT,
   `entity` int(11) NOT NULL,

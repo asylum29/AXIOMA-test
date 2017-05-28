@@ -5,6 +5,7 @@
 
 body {
     padding-top: 70px;
+    padding-bottom: 10px;
 }
 
 #questionnaires .selectedcolor {
@@ -49,4 +50,12 @@ body {
 
 #element .table tr td:first-child {
     font-weight: bold;
+}
+
+#element .photo {
+    margin-bottom: 5px;
+}
+
+#element .photo img {
+    border: 1px solid #adadad;
 }

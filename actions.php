@@ -54,7 +54,7 @@ switch ($action) {
             if (!AcImage::isFileImage($photo['tmp_name'])) {
                 $errors['photos'] = 'noimage';
                 break;
-            } else if ($photo['size'] / 1024 / 1024 > 5) {
+            } else if ($photo['size'] / 1024 / 1024 > 1) {
                 $errors['photos'] = 'filesize';
                 break;
             }
@@ -74,11 +74,23 @@ switch ($action) {
                 'selflearning' => (int)isset($personal['selflearning']),
                 'diligence' => (int)isset($personal['diligence'])
             ));
+            AcImage::setRewrite(true);
             if ($avatar) {
+                $imаge = AcImage::createImage($avatar['tmp_name']);
+                $imаge->cropCenter('1pr', '1pr'); // соотношение сторон 1:1
+                $imаge->resize(60, 60); // ресайзинг полученного квадрата
+                $imаge->save($avatar['tmp_name']);
                 FileManager::add_file($id, 'avatar', $avatar);
             }
             foreach ($photos as $photo) {
                 if (!$photo) continue;
+                $imаge = AcImage::createImage($photo['tmp_name']);
+                if ($imаge->getHeight() > $imаge->getWidth()) {
+                    $imаge->resizeByHeight(700);
+                } else {
+                    $imаge->resizeByWidth(600);
+                }
+                $imаge->save($photo['tmp_name']);
                 FileManager::add_file($id, 'photos', $photo);
             }
             echo 'true';
@@ -140,31 +152,54 @@ switch ($action) {
 
         $id = optional_param('id');
         $record = $DB->get_record('questionnaires', array('id' => $id));
-        $avatar = FileManager::get_file_by_filearea($id, 'avatar');
-        $photos = FileManager::get_files_in_filearea($id, 'photos');
+        if ($record) {
+            $avatar = FileManager::get_file_by_filearea($id, 'avatar');
+            $photos = FileManager::get_files_in_filearea($id, 'photos');
 
-        if ($record['assiduity'] == 0) {
-            unset($record['assiduity']);
+            if ($record['assiduity'] == 0) {
+                unset($record['assiduity']);
+            }
+            if ($record['neatness'] == 0) {
+                unset($record['neatness']);
+            }
+            if ($record['selflearning'] == 0) {
+                unset($record['selflearning']);
+            }
+            if ($record['diligence'] == 0) {
+                unset($record['diligence']);
+            }
+
+            $element = array();
+            $element['questionnaire'] = $record;
+            if ($avatar) {
+                $element['avatar'] = $avatar;
+            }
+            if (count($photos) > 0) {
+                $element['photos'] = $photos;
+            }
+
+            echo json_encode($element);
+        } else {
+            echo 'false';
         }
-        if ($record['neatness'] == 0) {
-            unset($record['neatness']);
-        }
-        if ($record['selflearning'] == 0) {
-            unset($record['selflearning']);
-        }
-        if ($record['diligence'] == 0) {
-            unset($record['diligence']);
-        }
-        
-        $element['questionnaire'] = $record;
-        if ($avatar) {
-            $element['avatar'] = $avatar;
-        }
-        if (count($photos) > 0) {
-            $element['photos'] = $photos;
-        }
-        
-        echo json_encode($element);
+        break;
+
+    case 'getfile':
+        admin_required();
+
+        $id = optional_param('id');
+        if ($file = FileManager::get_file_by_id($id)) {
+            $path = FileManager::get_file_path($id);
+            header('Content-Description: File Transfer');
+            header('Content-Type: application/octet-stream');
+            header("Content-Disposition: attachment; filename=\"{$file['filename']}\"");
+            header('Content-Transfer-Encoding: binary');
+            header('Expires: 0');
+            header('Cache-Control: must-revalidate');
+            header('Pragma: public');
+            header('Content-Length: ' . filesize($path));
+            echo file_get_contents($path);
+        };
         break;
 }
 

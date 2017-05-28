@@ -46,24 +46,6 @@ function get_file($name, $optional = false) {
     }
 }
 
-function resize_image($filepath, $width, $height)
-{
-    AcImage::setRewrite(true);
-    $img = AcImage::createImage($filepath);
-    /*$width_origin = $img->getWidth();
-    $height_origin = $img->getHeight();
-    if ($width_origin > $width && $height_origin > $height) {
-        $img->cropCenter("{$width}pr", "{$height}pr");
-        $img->resizeByHeight($height);
-        $img->resizeByWidth($width);
-    } else {
-        $img->cropCenter($width, $height);
-    }*/
-    $img->resizeByHeight($height);
-    $img->resizeByWidth($width);
-    $img->save($filepath);
-}
-
 function clean_param($param, $type)
 {
     switch ($type)
@@ -83,14 +65,7 @@ function clean_param($param, $type)
         case PARAM_DATE:
             $date = DateTime::createFromFormat('Y-m-d', $param);
             $errors = DateTime::getLastErrors();
-            $timestamp = $date ? $date->getTimestamp() : 0;
-            return empty($errors['warning_count']) && $timestamp > 0 ? strtotime('midnight', $timestamp) : '';
-
-        case PARAM_TIME:
-            $date = DateTime::createFromFormat('Y-m-d', $param);
-            $errors = DateTime::getLastErrors();
-            $timestamp = $date ? $date->getTimestamp() : 0;
-            return empty($errors['warning_count']) && $timestamp > 0 ? $timestamp : '';
+            return $date && empty($errors['warning_count']) ? $date->format('Y-m-d') : '';
 
         default:
             die('unknownparamtype');

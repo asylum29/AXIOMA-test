@@ -1,145 +1,181 @@
-﻿<div id="questionnaires">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-            Анкетирование
-        </div>
-        <div class="panel-body">
-            <form class="form-horizontal" method="post" enctype="multipart/form-data">
+﻿<div id="list">
+    <div id="elements">
+        <h2>Список анкет</h2>
 
-                <div id="questionnaires1">
-                    <div class="form-group required">
-                        <label class="control-label col-sm-2" for="sex">Ваш пол</label>
-                        <div class="col-sm-10">
-                            <select id="sex" name="sex" class="form-control">
-                                <option value="m">Мужской</option>
-                                <option value="f">Женский</option>
-                            </select>
-                        </div>
-                    </div>
-
-                    <div class="form-group required">
-                        <label class="control-label col-sm-2" for="lastname">Ваша фамилия</label>
-                        <div class="col-sm-10">
-                            <input id="lastname" type="text" name="lastname" class="form-control" autocomplete="off">
-                        </div>
-                    </div>
-
-                    <div class="form-group requierd">
-                        <label class="control-label col-sm-2" for="firstname">Ваше имя</label>
-                        <div class="col-sm-10">
-                            <input id="firstname" type="text" name="firstname" class="form-control" autocomplete="off">
-                        </div>
-                    </div>
+        <div class="panel panel-default">
+            <div class="panel-heading">
+                Фильтр по личным качествам
+            </div>
+            <div class="panel-body">
+                <form class="form-horizontal" method="get">
 
                     <div class="form-group">
-                        <label class="control-label col-sm-2" for="middlename">Ваше отчество</label>
+                        <label class="control-label col-sm-2">Личные качества</label>
                         <div class="col-sm-10">
-                            <input id="middlename" type="text" name="middlename" class="form-control" autocomplete="off">
-                        </div>
-                    </div>
-
-                    <div class="form-group required">
-                        <label class="control-label col-sm-2" for="birth">Ваша дата рождения</label>
-                        <div class="col-sm-10">
-                            <input id="birth" type="text" name="birth" class="form-control date-ui" autocomplete="off">
-                        </div>
-                    </div>
-                </div>
-
-                <div id="questionnaires2">
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="avatar">Ваш аватар</label>
-                        <div class="col-sm-10">
-                            <input id="avatar" type="file" name="avatar">
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-sm-2" for="color">Ваш любимый цвет</label>
-                        <div class="col-sm-10">
-                            <!--<input id="color" type="color" name="color" class="form-control">-->
-                            <button type="button" class="btn btn-sm btn-info" data-toggle="modal"
-                                    data-target="#colordialog">Выбрать цвет
-                            </button>
-                            <div class="selectedcolor"></div>
-                            <input id="color" type="hidden" name="color" value="rgb(15, 15, 15)">
-                        </div>
-                    </div>
-                </div>
-
-                <div id="questionnaires3">
-                    <div class="form-group required">
-                        <label class="control-label col-sm-2" for="skills">Ваши навыки</label>
-                        <div class="col-sm-10">
-                            <textarea id="skills" name="skills" class="form-control"></textarea>
-                        </div>
-                    </div>
-
-                    <div class="form-group">
-                        <label class="control-label col-sm-2">Ваши личные качества</label>
-                        <div class="col-sm-10">
-                            <label class="checkbox-inline"><input type="checkbox"
+                            <label class="checkbox-inline"><input class="filterbtn" type="checkbox"
                                                                   name="personal[assiduity]">усидчивость</label>
-                            <label class="checkbox-inline"><input type="checkbox"
+                            <label class="checkbox-inline"><input class="filterbtn" type="checkbox"
                                                                   name="personal[neatness]">опрятность</label>
-                            <label class="checkbox-inline"><input type="checkbox" name="personal[selflearning]">самообучаемость</label>
-                            <label class="checkbox-inline"><input type="checkbox"
+                            <label class="checkbox-inline"><input class="filterbtn" type="checkbox" name="personal[selflearning]">самообучаемость</label>
+                            <label class="checkbox-inline"><input class="filterbtn" type="checkbox"
                                                                   name="personal[diligence]">трудолюбие</label>
                         </div>
                     </div>
-                </div>
 
-                <div id="questionnaires4">
-                    <div class="form-group">
-                        <label class="control-label col-sm-2">Ваши фотографии</label>
-                        <div class="col-sm-10 photos">
-                            <input type="file" name="photo1">
-                        </div>
-                    </div>
+                    <input type="hidden" name="sort" value="1">
 
-                    <div class="form-group">
-                        <label class="control-label col-sm-2"></label>
-                        <div class="col-sm-10">
-                            <button type="button" class="addphotobtn btn btn-xs btn-info">Добавить фотографию</button>
-                        </div>
-                    </div>
+                    <!--<div class="text-center">
+                        <input class="filterbtn btn btn-sm btn-primary" type="submit" value="Выполнить фильтрацию">
+                    </div>-->
 
-                    <input class="qnsave btn btn-sm btn-primary" type="submit" value="Отправить анкету">
-                </div>
-
-            </form>
-        </div>
-    </div>
-    <button class="qnprev btn btn-sm btn-default">Предыдущий этап</button>
-    <button class="qnnext btn btn-sm btn-default">Следующий этап</button>
-
-    <div id="colordialog" class="modal fade" role="dialog">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal">&times;</button>
-                    <h4 class="modal-title">Выбор цвета</h4>
-                </div>
-                <div class="modal-body">
-                    <table class="table">
-                        <tbody>
-                        <tr style="height: 50px;">
-                            <td class="colordialog colordialog-black"></td>
-                            <td class="colordialog colordialog-red"></td>
-                            <td class="colordialog colordialog-green"></td>
-                        </tr>
-                        <tr style="height: 50px;">
-                            <td class="colordialog colordialog-yellow"></td>
-                            <td class="colordialog colordialog-blue"></td>
-                            <td class="colordialog colordialog-white"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-                <!--<div class="modal-footer">
-                    <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                </div>-->
+                </form>
             </div>
         </div>
+
+        <table class="table">
+            <thead>
+            <tr>
+                <th><a href="#" class="sortlink" data-sort="1">Фамилия<span>^</span></a></th>
+                <th>Имя</th>
+                <th>Отчество</th>
+                <th><a href="#" class="sortlink" data-sort="2">Дата рождения<span></span></a></th>
+                <th></th>
+            </tr>
+            </thead>
+            <tbody id="contentlist">
+            <script id="listtmpl" type="text/html">
+                {{#list.length}}
+                {{#list}}
+                <tr>
+                    <td>{{lastname}}</td>
+                    <td>
+                        {{#formatempty}}
+                        {{firstname}}
+                        {{/formatempty}}
+                    </td>
+                    <td>
+                        {{#formatempty}}
+                        {{middlename}}
+                        {{/formatempty}}
+                    </td>
+                    <td>
+                        {{#formatdate}}
+                        {{birth}}
+                        {{/formatdate}}
+                    </td>
+                    <td>
+                        <a href="#" class="more" data-id="{{id}}">
+                            Подробнее
+                        </a>
+                    </td>
+                </tr>
+                {{/list}}
+                {{/list.length}}
+                {{^list.length}}
+                <tr>
+                    <td colspan="5">
+                        <h4 class="text-center">
+                            Анкеты не найдены
+                        </h4>
+                    </td>
+                </tr>
+                {{/list.length}}
+            </script>
+            </tbody>
+        </table>
+    </div>
+
+    <div id="element" style="display: none;">
+        <h2>Анкета</h2>
+
+        <table class="table">
+            <tbody id="contentelement">
+            <script id="elementtmpl" type="text/html">
+                {{#element}}
+                <tr>
+                    <td style="width: 200px">Пол</td>
+                    <td>
+                        {{#formatsex}}
+                        {{#questionnaire}}{{sex}}{{/questionnaire}}
+                        {{/formatsex}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Фамилия</td>
+                    <td>{{#questionnaire}}{{lastname}}{{/questionnaire}}</td>
+                </tr>
+                <tr>
+                    <td>Имя</td>
+                    <td>
+                        {{#formatempty}}
+                        {{#questionnaire}}{{firstname}}{{/questionnaire}}
+                        {{/formatempty}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Отчество</td>
+                    <td>
+                        {{#formatempty}}
+                        {{#questionnaire}}{{middlename}}{{/questionnaire}}
+                        {{/formatempty}}
+                    </td>
+                </tr>
+                <tr>
+                    <td>Дата рождения</td>
+                    <td>
+                        {{#formatdate}}
+                        {{#questionnaire}}{{birth}}{{/questionnaire}}
+                        {{/formatdate}}
+                    </td>
+                </tr>
+                {{#avatar}}
+                <tr>
+                    <td>Аватар</td>
+                    <td>
+                        {{#formatimage}}{{id}}{{/formatimage}}
+                    </td>
+                </tr>
+                {{/avatar}}
+                <tr>
+                    <td>Любимый цвет</td>
+                    <td style="background-color: {{#questionnaire}}{{color}}{{/questionnaire}}"></td>
+                </tr>
+                <tr>
+                    <td>Навыки</td>
+                    <td>{{#questionnaire}}{{skills}}{{/questionnaire}}</td>
+                </tr>
+                <tr>
+                    <td>Личные качества</td>
+                    <td>
+                        <div class="splitter">
+                            {{#formatempty}}
+                            {{#questionnaire}}
+                            {{#assiduity}}<span>усидчивость</span>{{/assiduity}}
+                            {{#neatness}}<span>опрятность</span>{{/neatness}}
+                            {{#selflearning}}<span>самообучаемость</span>{{/selflearning}}
+                            {{#diligence}}<span>трудолюбие</span>{{/diligence}}
+                            {{/questionnaire}}
+                            {{/formatempty}}
+                        </div>
+                    </td>
+                </tr>
+                {{#photos.length}}
+                <tr>
+                    <td>Фотографии</td>
+                    <td>
+                        {{#photos}}
+                        <div class="photo">
+                            {{#formatimage}}{{id}}{{/formatimage}}
+                        </div>
+                        {{/photos}}
+                    </td>
+                </tr>
+                {{/photos.length}}
+                {{/element}}
+            </script>
+            </tbody>
+        </table>
+
+        <button class="retbtn btn btn-sm btn-default">Назад к списку анкет</button>
     </div>
 </div>
