@@ -254,7 +254,8 @@ var UI = function(wwwroot) {
         }
         function formatDate() {
             return function(date, render) {
-                var d = new Date(render(date));
+                var split = render(date).split('-');
+                var d = new Date(split[0], split[1] - 1, split[2]);
                 var options = {
                     year: 'numeric',
                     month: 'numeric',
