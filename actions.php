@@ -2,7 +2,7 @@
 
 require_once('config.php');
 
-$errors = [];
+$errors = array();
 $action = optional_param('action');
 switch ($action) {
     case 'add':
