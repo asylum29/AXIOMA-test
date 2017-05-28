@@ -135,11 +135,14 @@ switch ($action) {
 
         $order = optional_param('sort', '');
         switch ($order) {
+            case '1':
+                $order = 'ORDER BY lastname';
+                break;
             case '2':
                 $order = 'ORDER BY birth';
                 break;
             default:
-                $order = 'ORDER BY lastname';
+                $order = '';
                 break;
         }
 

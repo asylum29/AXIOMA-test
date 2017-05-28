@@ -15,5 +15,5 @@ require_once($CONFIG->dirroot . '/lib/files.php');
 require_once($CONFIG->dirroot . '/AcImage/AcImage.php');
 require_once($CONFIG->dirroot . '/lib/helper.php');
 
-$DB = new DBConnection($CONFIG->dbname, $CONFIG->dbuser, $CONFIG->dbpassword);
+$DB = new DBConnection($CONFIG->dbhost, $CONFIG->dbport, $CONFIG->dbname, $CONFIG->dbuser, $CONFIG->dbpassword);
 $USER = new User();

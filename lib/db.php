@@ -6,8 +6,8 @@ class DBConnection {
 
     private $pdo;
     
-    public function __construct($dbname, $username = null, $password = null) {
-        $this->pdo = new PDO("mysql:host=localhost:3306;dbname=$dbname", $username, $password);  
+    public function __construct($dbhost, $dbport, $dbname, $username = null, $password = null) {
+        $this->pdo = new PDO("mysql:host=$dbhost;port=$dbport;dbname=$dbname", $username, $password);
     }
 
     public function get_record($table, array $params = array()) {

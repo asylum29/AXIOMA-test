@@ -26,6 +26,8 @@ CREATE TABLE `files` (
 $CONFIG = new stdClass();
 $CONFIG->dirroot = 'C:/path/to/wwwroot';
 $CONFIG->wwwroot = 'http://localhost:90';
+$CONFIG->dbhost = 'localhost';
+$CONFIG->dbport = 3306;
 $CONFIG->dbname = 'dbname';
 $CONFIG->dbuser = 'dbuser';
 $CONFIG->dbpassword = 'dbpass';

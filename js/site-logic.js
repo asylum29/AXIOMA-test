@@ -1,7 +1,7 @@
 $(document).ready(function() {
     $.ajaxSetup ({ cache: false });
     var wwwroot = $('body').data('wwwroot');
-    var ui = new UI(wwwroot);
+    var ui = new QM(wwwroot);
     $('#main-public').on('click', function(e) {
         e.preventDefault();
         ui.showQuestionnaires();
@@ -12,7 +12,7 @@ $(document).ready(function() {
     });
 });
 
-var UI = function(wwwroot) {
+var QM = function(wwwroot) { // QuestionnairesManager
     var content = $('#content');
     var questionnaires, questionform;
     var authform = $('<div></div>').load(wwwroot + '/html/authform.html', loadList);
@@ -31,7 +31,7 @@ var UI = function(wwwroot) {
         content.empty();
         content.append(questionform.clone());
         content.find('.date-ui').datepicker({ format: 'yyyy-mm-dd', language: 'ru' });
-        var stage = 1;
+        var stage = 1, activestage = '';
         var prevbtn = content.find('.qnprev');
         var nextbtn = content.find('.qnnext');
         var savebtn = content.find('.qnsave');
@@ -57,14 +57,9 @@ var UI = function(wwwroot) {
         prevbtn.prop('disabled', true);
         function showQuestionnairesStage(stage) {
             if (stage < 1 || stage > 4) return;
-            for (var i = 1; i <= 4; i++) {
-                s = content.find('#questionnaires' + i);
-                if (stage === i) {
-                    s.show();
-                } else {
-                    s.hide();
-                }
-            }
+            content.find(activestage).hide();
+            content.find('#questionnaires' + stage).show();
+            activestage = '#questionnaires' + stage;
         }
         savebtn.on('click', function(e) {
             e.preventDefault();
