@@ -12,7 +12,7 @@ switch ($action) {
         $lastname = clean_param(optional_param('lastname', ''), PARAM_NOTAGS);
         $firstname = clean_param(optional_param('firstname', ''), PARAM_NOTAGS);
         $middlename = clean_param(optional_param('middlename', ''), PARAM_NOTAGS);
-        $birth = clean_param(optional_param('birth', ''), PARAM_NOTAGS);
+        $birth = clean_param(optional_param('birth', ''), PARAM_DATE);
         $color = clean_param(optional_param('color', ''), PARAM_NOTAGS);
         $skills = clean_param(optional_param('skills', ''), PARAM_NOTAGS);
         $personal = optional_param('personal', '');
